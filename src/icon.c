@@ -143,9 +143,9 @@ int touch_button(struct list_icon *listHead, int x, int y)
             break;
         p = p->next;
     }
-    if(p == 0)
+    if(p == NULL)
     {
-        return 0;
+        return -1; //按到了其他地方
     }else
         return p->name;
 }

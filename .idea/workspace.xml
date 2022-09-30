@@ -18,17 +18,9 @@
     <list default="true" id="3aea8ea3-dfb5-4c5d-978c-c5903239cbc7" name="变更" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/av_system" beforeDir="false" afterPath="$PROJECT_DIR$/bin/av_system" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/bmp.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/bmp.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/icon.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/icon.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/lcd.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/lcd.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/menu.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/menu.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/touch.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/touch.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bmp.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/bmp.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/icon.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/icon.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lcd.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/lcd.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/menu.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/touch.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/touch.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -117,7 +109,7 @@
       <option name="presentableId" value="Default" />
       <updated>1664434634814</updated>
       <workItem from="1664434636646" duration="10490000" />
-      <workItem from="1664499261882" duration="9635000" />
+      <workItem from="1664499261882" duration="14377000" />
     </task>
     <servers />
   </component>
