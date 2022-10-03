@@ -10,6 +10,7 @@
 #include "touch.h"
 #include "icon.h"
 #include "menu.h"
+#include "jpeg.h"
 #include "picture.h"
 
 #endif //__MAIN_H

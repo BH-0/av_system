@@ -10,12 +10,13 @@
 #include "touch.h"
 #include "icon.h"
 #include <stdlib.h>
+#include "picture.h"
 
-//桌面
-int menu_main();
 
 //当点击开始时，此函数被调用
 int menu_start();
 
+//桌面
+int menu_main();
 
 #endif //__MENU_H

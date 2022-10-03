@@ -139,7 +139,7 @@ int touch_button(struct list_icon *listHead, int x, int y)
     bmp_icon *p = listHead->head;
     while (p)
     {
-        if(x>p->x && x<(p->x+p->bmp->width) && y>p->y && y<(p->y+p->bmp->hight))
+        if(x>p->x && x<(p->x+p->bmp->width) && y>p->y && y<(p->y+p->bmp->height))
             break;
         p = p->next;
     }

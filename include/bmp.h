@@ -20,7 +20,7 @@
 
 typedef struct{
     char *path; //路径
-    int hight;  //高
+    int height;  //高
     int width;  //宽
     char *bmp_buf; //数组指针
 }bmp_t;

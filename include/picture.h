@@ -20,6 +20,7 @@
 #include <math.h>   //编译时需要链接数学库 -lm
 #include "lcd.h"
 #include "bmp.h"
+#include "jpeg.h"
 
 #define BMP_TYPE 0x4d42
 #define JPEG_TYPE 0xd8ff
@@ -38,6 +39,14 @@ struct pic_link{
     struct pic_t *tail;//保存链表的数据尾结点的位置
     int nodeNumber;//保存链表结点的数量
 };
+
+//图库管理结构体全局变量
+extern struct pic_link *gallery;
+
+//任意尺寸重建图片，黑底
+//可将小图片等比例变大或大图片等比例缩小,注意及时free返回指针
+//入口参数：图片管理结构体，大小
+bmp_t *pic_rebuild(bmp_t *pic, unsigned int width, unsigned int height);
 
 //文件名排序前比较算法
 //入口参数：对比对象，与被对比对象

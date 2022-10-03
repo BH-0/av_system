@@ -11,7 +11,9 @@ int main(int argc, char **argv)
     start_out = create_list_icon();  //初始化按钮图标管理结构体
     icon_init(start_out,"./menu/start_out.txt");
 
-    struct pic_link *gallery = pic_link_init(); //初始化图库
+    gallery = pic_link_init(); //初始化图库
+
+    pic_rebuild(NULL,1,2);
 
 
 #if 0 //进入线程

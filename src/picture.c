@@ -3,9 +3,22 @@
 //----------------------------------------------------------------
 //图库处理程序
 //----------------------------------------------------------------
-
 //进入图库程序后自动扫描文件夹下所有文件
 //先不考虑下载，先实现本地图库预览
+
+//图库管理结构体全局变量
+struct pic_link *gallery;
+
+//任意尺寸重建图片，黑底
+//可将小图片等比例变大或大图片等比例缩小,注意及时free返回指针
+//入口参数：图片管理结构体，大小
+bmp_t *pic_rebuild(bmp_t *pic, unsigned int width, unsigned int height)
+{
+    int wh_cmd = 0; //0：宽贴边，1：高贴边
+    float w_h = (float)width/(float)height;
+    printf("w/h:%f\n",w_h);
+}
+
 
 //文件名排序前比较算法
 //入口参数：对比对象，与被对比对象
@@ -195,7 +208,10 @@ struct pic_link *pic_link_init(void)
                 insert_list_sort(listHead, newPic);
                 break;
             case JPEG_TYPE:
-
+                //创建节点
+                newPic = new_pic(open_jpeg(ep->d_name), ep->d_name);
+                //有序插入
+                insert_list_sort(listHead, newPic);
                 break;
         }
     }

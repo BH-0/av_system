@@ -22,26 +22,26 @@ bmp_t *open_bmp(char *path)
     lseek(fd_bmp, 0x12, SEEK_SET); //偏移到记录宽高的位置
 
     read(fd_bmp, &bmp->width, 4);   //800
-    read(fd_bmp, &bmp->hight, 4);   //480
-    printf("%s: hight=%d, width=%d\n", path, bmp->hight, bmp->width);
+    read(fd_bmp, &bmp->height, 4);   //480
+    printf("%s: height=%d, width=%d\n", path, bmp->height, bmp->width);
 
     //去除掉它的头54个字节
     lseek(fd_bmp,54,SEEK_SET);
 
     //存储bmp图片的buffer800*480
-    bmp->bmp_buf = malloc(bmp->width*bmp->hight*3);
+    bmp->bmp_buf = malloc(bmp->width*bmp->height*3);
     //读bmp图
-    read(fd_bmp, (char *)bmp->bmp_buf, bmp->width*bmp->hight*3);
+    read(fd_bmp, (char *)bmp->bmp_buf, bmp->width*bmp->height*3);
     //上下翻转
     char buf= 0;
     int y,x;
-    for(y=0; y<bmp->hight/2; y++)
+    for(y=0; y<bmp->height/2; y++)
         for(x=0; x<bmp->width*3; x++)
         {
             //y 0 = 479  1 = 478  239 = 240
             buf = BMP_BUF(y,x);
-            BMP_BUF(y,x) = BMP_BUF(bmp->hight-1-y,x);
-            BMP_BUF(bmp->hight-1-y,x) = buf;
+            BMP_BUF(y,x) = BMP_BUF(bmp->height-1-y,x);
+            BMP_BUF(bmp->height-1-y,x) = buf;
         }
     //关闭bmp
     close(fd_bmp);
@@ -56,7 +56,7 @@ void show_bmp(int (*LCD_addr)[800], bmp_t *bmp, int x_start, int y_start)
     int y;//y表示纵轴
 
 
-    for(y=0;y<bmp->hight;y++)
+    for(y=0;y<bmp->height;y++)
         for(x=0;x<bmp->width;x++)
         {
             if((x+x_start)>799 || (y+y_start)>479 || (x+x_start)<0 || (y+y_start)<0)
