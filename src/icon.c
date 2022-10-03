@@ -36,7 +36,7 @@ void icon_init(struct list_icon *listHead,char * txt_path)
         }
         p=strtok(NULL,"\n");
     }
-
+    fclose(fp);
 }
 
 //初始化图标管理结构体

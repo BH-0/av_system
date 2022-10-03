@@ -98,6 +98,7 @@ void show_bmp_plus(int (*LCD_addr)[800], char (*bmp_buf1)[800*3], char (*bmp_buf
 
     int LCD_buf1[480][800] = {0};
     int LCD_buf2[480][800] = {0};
+    //装填
     for(y=0;y<480;y++)
     {
         for(x=0;x<800;x++)
@@ -106,6 +107,7 @@ void show_bmp_plus(int (*LCD_addr)[800], char (*bmp_buf1)[800*3], char (*bmp_buf
             LCD_buf2[y][x] = bmp_buf2[y][x*3] | bmp_buf2[y][x*3+1]<<8 | bmp_buf2[y][x*3+2]<<16;
         }
     }
+    //显示
     if(direction == 0)  //从左往右
     {
         for(z=1;z<800;z+=powf(speed_buf, (800-z/1.3)/800))//这里可以调节动画末尾缓冲速度

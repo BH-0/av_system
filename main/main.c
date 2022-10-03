@@ -11,10 +11,10 @@ int main(int argc, char **argv)
     start_out = create_list_icon();  //初始化按钮图标管理结构体
     icon_init(start_out,"./menu/start_out.txt");
 
-//    bmp_t *bmp[3] = {0};
-//    bmp[0] = open_bmp("./menu/R-C2.bmp");
-//    show_bmp(LCD_addr,bmp[0],0,0); //桌面
+    struct pic_link *gallery = pic_link_init(); //初始化图库
 
+
+#if 0 //进入线程
     while (1)
     {
         menu_main();
@@ -26,5 +26,6 @@ int main(int argc, char **argv)
 //        display_icons(LCD_addr, start_out, 0);  //显示所有按钮
 //        sleep(1);
     }
+#endif
     return 0;
 }

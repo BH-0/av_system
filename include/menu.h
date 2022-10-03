@@ -9,6 +9,7 @@
 #include "bmp.h"
 #include "touch.h"
 #include "icon.h"
+#include <stdlib.h>
 
 //桌面
 int menu_main();
