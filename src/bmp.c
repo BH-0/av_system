@@ -115,7 +115,7 @@ void show_bmp_plus(int (*LCD_addr)[800], char (*bmp_buf1)[800*3], char (*bmp_buf
         }
     }
     //显示
-    if(direction == 0)  //从左往右
+    if(direction == right)  //从左往右
     {
         for(z=1;z<800;z+=powf(speed_buf, (800-z/1.3)/800))//这里可以调节动画末尾缓冲速度
             for(y=0;y<480;y++)
@@ -126,7 +126,7 @@ void show_bmp_plus(int (*LCD_addr)[800], char (*bmp_buf1)[800*3], char (*bmp_buf
                     else
                         LCD_addr[y][x] = LCD_buf1[y][x-((int)z-1)];
                 }
-    }else if(direction == 1)  //从右往左
+    }else if(direction == left)  //从右往左
     {
         for(z=1;z<800;z+=powf(speed_buf, (800-z/1.3)/800))//这里可以调节动画末尾缓冲速度
             for(y=0;y<480;y++)
@@ -137,7 +137,7 @@ void show_bmp_plus(int (*LCD_addr)[800], char (*bmp_buf1)[800*3], char (*bmp_buf
                     else
                         LCD_addr[y][x] = LCD_buf2[y][x-(799-((int)z-1))];
                 }
-    }else if(direction == 3)  //从上往下
+    }else if(direction == down)  //从上往下
     {
         for(z=1;z<480;z+=powf(speed_buf, (480-z/1.3)/480))//这里可以调节动画末尾缓冲速度
             for(y=0;y<480;y++)
@@ -148,7 +148,7 @@ void show_bmp_plus(int (*LCD_addr)[800], char (*bmp_buf1)[800*3], char (*bmp_buf
                     else
                         LCD_addr[y][x] = LCD_buf1[y-((int)z-1)][x];
                 }
-    }else if(direction == 4)  //从下往上
+    }else if(direction == up)  //从下往上
     {
         for(z=1;z<480;z+=powf(speed_buf, (480-z/1.3)/480))//这里可以调节动画末尾缓冲速度
             for(y=0;y<480;y++)
@@ -167,4 +167,20 @@ void show_bmp_plus(int (*LCD_addr)[800], char (*bmp_buf1)[800*3], char (*bmp_buf
                 LCD_addr[y][x] = LCD_buf2[y][x];
         }
 
+}
+
+//销毁一个图片结构体
+void destroy_bmp_t(bmp_t *pic)
+{
+    if(pic == NULL)
+        return;
+    if(pic->bmp_buf == NULL)
+    {
+        free(pic);
+        return;
+    }
+    char *dp = pic->bmp_buf;
+    free(dp);
+    pic->bmp_buf = NULL;
+    free(pic);
 }

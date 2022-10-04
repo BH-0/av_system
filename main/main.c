@@ -12,12 +12,16 @@ int main(int argc, char **argv)
     icon_init(start_out,"./menu/start_out.txt");
 
     gallery = pic_link_init(); //初始化图库
+    print_allToList(gallery); //遍历链表
 
-    bmp_t *test1 = open_bmp("./pic/b4.bmp");
-    bmp_t *test2 = pic_rebuild_pro(test1,800,480, BG_COLOR);
-    show_bmp(LCD_addr,test2,0,0);
+//    bmp_t *test1 = open_bmp("./pic/b4.bmp");
+//    bmp_t *test2 = pic_rebuild_pro(test1,800,480, BG_COLOR);
+//    show_bmp(LCD_addr,test2,0,0);
 
-#if 0 //进入线程
+
+    //pic_touch_show();    //图片全屏滑动浏览界面
+
+#if 1 //进入线程
     while (1)
     {
         menu_main();

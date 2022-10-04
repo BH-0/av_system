@@ -28,7 +28,7 @@ bmp_t *pic_rebuild_pro(bmp_t *pic, unsigned int width, unsigned int height, unsi
     if((float)pic->width/(float)pic->height < (float)width/(float)height) //高贴边
     {
         zoom_ratio = (float)pic->height/(float)height;
-        printf("zoom_ratio: %f\n", zoom_ratio);
+        printf("zoom_ratio: %f\n", (float)height/(float)pic->height);
         char (* pw)[pic->width*3]  = (void *)pic->bmp_buf;
 //        char (*pb)[(int)((float)pic->width/zoom_ratio)*3] = malloc(height*(int)((float)pic->width/zoom_ratio)*3);
 //        for(y_e=0; y_e<height; y_e++)
@@ -67,7 +67,7 @@ bmp_t *pic_rebuild_pro(bmp_t *pic, unsigned int width, unsigned int height, unsi
     }else   //宽贴边
     {
         zoom_ratio = (float)pic->width/(float)width;
-        printf("zoom_ratio: %f\n", zoom_ratio);
+        printf("zoom_ratio: %f\n", (float)width/(float)pic->width);
         char (* pw)[pic->width*3]  = (void *)pic->bmp_buf;
 
         int y_y = (height - ((int)((float)pic->height/zoom_ratio)))/2; //实际图片到边缘的距离（黑色背景的宽度）

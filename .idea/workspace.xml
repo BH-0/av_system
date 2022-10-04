@@ -18,10 +18,10 @@
     <list default="true" id="3aea8ea3-dfb5-4c5d-978c-c5903239cbc7" name="变更" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/av_system" beforeDir="false" afterPath="$PROJECT_DIR$/bin/av_system" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/picture.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/picture.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/bmp.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/bmp.h" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/menu.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/menu.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/bmp.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/bmp.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jpeg.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/jpeg.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/menu.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/picture.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/picture.c" afterDir="false" />
     </list>
@@ -109,7 +109,7 @@
       <workItem from="1664499261882" duration="18863000" />
       <workItem from="1664710405098" duration="14136000" />
       <workItem from="1664767774999" duration="45401000" />
-      <workItem from="1664877760674" duration="10721000" />
+      <workItem from="1664877760674" duration="15267000" />
     </task>
     <servers />
   </component>

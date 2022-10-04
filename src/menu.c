@@ -5,30 +5,89 @@
 
 
 
-//图片滑动浏览界面
-int pic_touch_show()
+//图片全屏滑动浏览界面
+int pic_slid_show()
 {
-    //先显示第一张图
+    pic_t *p = gallery->head;
+    bmp_t *pic = NULL;
+    bmp_t *pic_next = NULL;
 
+    //先显示第一张图
+    pic = pic_rebuild_pro(p->pic, 800, 480, 0); //图片尺寸转换
+    printf("display:%s\n",p->find_name);
+    show_bmp(LCD_addr, pic, 0,0);
     while(1)
     {
         switch(get_xy_plus(fd_ts, &x_ts, &y_ts))
         {
             case up:
+                p = p->prev;
+                pic_next = pic_rebuild_pro(p->pic, 800, 480, 0);   //图片尺寸转换
+                printf("display:%s\n",p->find_name);
+
+                //显示动画
+                show_bmp_plus(LCD_addr, (char (*)[800*3])pic->bmp_buf, \
+                    (char (*)[800*3])pic_next->bmp_buf, 0.5, up);
+
+                destroy_bmp_t(pic); //销毁上一张图片
+                pic=pic_next;
                 break;
             case down:
+                p = p->next;
+                pic_next = pic_rebuild_pro(p->pic, 800, 480, 0);   //图片尺寸转换
+                printf("display:%s\n",p->find_name);
+
+                //显示动画
+                show_bmp_plus(LCD_addr, (char (*)[800*3])pic->bmp_buf, \
+                    (char (*)[800*3])pic_next->bmp_buf, 0.5, down);
+
+                destroy_bmp_t(pic); //销毁上一张图片
+                pic=pic_next;
                 break;
             case left:
+                p = p->prev;
+                pic_next = pic_rebuild_pro(p->pic, 800, 480, 0);   //图片尺寸转换
+                printf("display:%s\n",p->find_name);
+
+                //显示动画
+                show_bmp_plus(LCD_addr, (char (*)[800*3])pic->bmp_buf, \
+                    (char (*)[800*3])pic_next->bmp_buf, 0.5, left);
+
+                destroy_bmp_t(pic); //销毁上一张图片
+                pic=pic_next;
                 break;
             case right:
+                p = p->next;
+                pic_next = pic_rebuild_pro(p->pic, 800, 480, 0);   //图片尺寸转换
+                printf("display:%s\n",p->find_name);
+
+                //显示动画
+                show_bmp_plus(LCD_addr, (char (*)[800*3])pic->bmp_buf, \
+                    (char (*)[800*3])pic_next->bmp_buf, 0.5, right);
+
+                destroy_bmp_t(pic); //销毁上一张图片
+                pic=pic_next;
                 break;
             case click:
+                destroy_bmp_t(pic);
                 return -1; //返回上级菜单
                 break;
         }
     }
     return 0;
 }
+
+//图片窗口化点击浏览界面
+int pic_click_show()
+{
+    bmp_t *bmp[3] = {0};
+    bmp[0] = open_bmp("./menu/win.bmp");
+    show_bmp(LCD_addr, bmp[0], 0,0);
+
+    while(1);
+    return 0;
+}
+
 
 //当点击开始按钮时，此函数被调用
 int menu_start()
@@ -63,11 +122,7 @@ int menu_start()
                     break;
                 case 8: //图片
                 printf("8\n");
-                    //pic_touch_show();
-                    bmp_t *bmp[3] = {0};
-                    bmp[0] = open_bmp("./menu/win.bmp");
-                    show_bmp(LCD_addr, bmp[0], 0,0); //桌面
-                    while(1);
+                    pic_slid_show();
                     return 0;
                     break;
                 case 9: //download

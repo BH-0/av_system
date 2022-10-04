@@ -13,6 +13,7 @@
 #include <stdlib.h>
 #include <math.h>   //编译时需要链接数学库 -lm
 #include "lcd.h"
+#include "touch.h"
 
 //一维数组坐标转换
 #define BMP_BUF(y,x) (*(bmp->bmp_buf + (y)*bmp->width*3 + (x)))
@@ -40,5 +41,7 @@ void show_bmp(int (*LCD_addr)[800], bmp_t *bmp, int x_start, int y_start);
 //只能传入800*480的图片
 void show_bmp_plus(int (*LCD_addr)[800], char (*bmp_buf1)[800*3], char (*bmp_buf2)[800*3], float speed, int direction);
 
+//销毁一个图片结构体
+void destroy_bmp_t(bmp_t *pic);
 
 #endif
