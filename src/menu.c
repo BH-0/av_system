@@ -63,11 +63,11 @@ int menu_start()
                     break;
                 case 8: //图片
                 printf("8\n");
-                    pic_touch_show();
-//                    bmp_t *bmp[3] = {0};
-//                    bmp[0] = open_bmp("./menu/win.bmp");
-//                    show_bmp(LCD_addr, bmp[0], 0,0); //桌面
-//                    while(1);
+                    //pic_touch_show();
+                    bmp_t *bmp[3] = {0};
+                    bmp[0] = open_bmp("./menu/win.bmp");
+                    show_bmp(LCD_addr, bmp[0], 0,0); //桌面
+                    while(1);
                     return 0;
                     break;
                 case 9: //download

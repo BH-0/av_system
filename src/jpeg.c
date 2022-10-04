@@ -72,25 +72,34 @@ bmp_t *open_jpeg(char *pjpg_path)
     jpeg_start_decompress(&cinfo);
 
 ////////////////////////////////////////////////////////////////////////////////
-        jpeg->width = cinfo.output_width;
-        jpeg->height = cinfo.output_height;
-        printf("%s: height=%d, width=%d\n",jpeg->path,jpeg->height,jpeg->width);
-        jpeg->bmp_buf = malloc(jpeg->width*jpeg->height*3);
+    jpeg->width = cinfo.output_width;
+    jpeg->height = cinfo.output_height;
+    printf("%s: height=%d, width=%d\n",jpeg->path,jpeg->height,jpeg->width);
+    if((jpeg->height*jpeg->width)%4 != 0) //像素点不为4的倍数
+    {
+        printf("%s:Error, the image pixels in multiples of four!\n",pjpg_path);
+        free(jpeg);
+        jpeg_finish_decompress(&cinfo); //销毁图片
+        jpeg_destroy_decompress(&cinfo);
+        close(jpg_fd);
+        return NULL;
+    }
 
+    jpeg->bmp_buf = malloc(jpeg->width*jpeg->height*3);
 
-        while(cinfo.output_scanline < cinfo.output_height )
+    while(cinfo.output_scanline < cinfo.output_height )
+    {
+        pcolor_buf = g_color_buf;
+
+        /* ?áè?jpgò?DDμ?rgb?μ */
+        jpeg_read_scanlines(&cinfo,(JSAMPARRAY)&pcolor_buf,1);
+        for(i=0; i<cinfo.output_width; i++)
         {
-            pcolor_buf = g_color_buf;
-
-            /* ?áè?jpgò?DDμ?rgb?μ */
-            jpeg_read_scanlines(&cinfo,(JSAMPARRAY)&pcolor_buf,1);
-            for(i=0; i<cinfo.output_width; i++)
-            {
-                *(jpeg->bmp_buf+(cinfo.output_scanline*cinfo.output_width*3+i*3+2)) = *(pcolor_buf+i*3);
-                *(jpeg->bmp_buf+(cinfo.output_scanline*cinfo.output_width*3+i*3+1)) = *(pcolor_buf+i*3+1);
-                *(jpeg->bmp_buf+(cinfo.output_scanline*cinfo.output_width*3+i*3)) = *(pcolor_buf+i*3+2);
-            }
+            *(jpeg->bmp_buf+(cinfo.output_scanline*cinfo.output_width*3+i*3+2)) = *(pcolor_buf+i*3);
+            *(jpeg->bmp_buf+(cinfo.output_scanline*cinfo.output_width*3+i*3+1)) = *(pcolor_buf+i*3+1);
+            *(jpeg->bmp_buf+(cinfo.output_scanline*cinfo.output_width*3+i*3)) = *(pcolor_buf+i*3+2);
         }
+    }
 /////////////////////////////////////////////////////////////////////////////////
 
     /*?a??íê3é*/

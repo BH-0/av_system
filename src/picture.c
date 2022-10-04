@@ -9,14 +9,96 @@
 //图库管理结构体全局变量
 struct pic_link *gallery;
 
-//任意尺寸重建图片，黑底
+//任意尺寸重建图片
 //可将小图片等比例变大或大图片等比例缩小,注意及时free返回指针
-//入口参数：图片管理结构体，大小
-bmp_t *pic_rebuild(bmp_t *pic, unsigned int width, unsigned int height)
+//入口参数：图片管理结构体，指定图片大小，背景填充颜色
+//返回值：一个新的图片结构体
+bmp_t *pic_rebuild_pro(bmp_t *pic, unsigned int width, unsigned int height, unsigned int bgcolor)
 {
-    int wh_cmd = 0; //0：宽贴边，1：高贴边
-    float w_h = (float)width/(float)height;
-    printf("w/h:%f\n",w_h);
+    bmp_t *pic_re = malloc(sizeof(bmp_t));
+    pic_re->path = pic->path;
+    pic_re->bmp_buf = NULL;//malloc(width*height*3);
+    char (*pz)[width*3] = malloc(height*width*3);
+
+    float zoom_ratio = 1.0f; //缩放
+    int pic_x = 0;
+    int pic_y = 0;
+    int x_e,y_e;
+
+    if((float)pic->width/(float)pic->height < (float)width/(float)height) //高贴边
+    {
+        zoom_ratio = (float)pic->height/(float)height;
+        printf("zoom_ratio: %f\n", zoom_ratio);
+        char (* pw)[pic->width*3]  = (void *)pic->bmp_buf;
+//        char (*pb)[(int)((float)pic->width/zoom_ratio)*3] = malloc(height*(int)((float)pic->width/zoom_ratio)*3);
+//        for(y_e=0; y_e<height; y_e++)
+//            for(x_e=0; x_e<(int)((float)pic->width/zoom_ratio);x_e++)
+//            {
+//                pb[y_e][x_e*3] = pw[(int)(y_e*zoom_ratio)][(int)(x_e*zoom_ratio)*3];
+//                pb[y_e][x_e*3+1] = pw[(int)(y_e*zoom_ratio)][(int)(x_e*zoom_ratio)*3+1];
+//                pb[y_e][x_e*3+2] = pw[(int)(y_e*zoom_ratio)][(int)(x_e*zoom_ratio)*3+2];
+//            }
+
+        int x_x = (width - ((int)((float)pic->width/zoom_ratio)))/2; //实际图片到边缘的距离（黑色背景的宽度）
+        for(y_e=0; y_e<height; y_e++)
+        {
+            for (x_e = 0; x_e < width; x_e++)
+            {
+                if (x_e >= x_x && x_e < x_x + (int) ((float) pic->width / zoom_ratio))
+                {
+                    pz[y_e][x_e * 3] = pw[(int)(y_e*zoom_ratio)][(int)(pic_x*zoom_ratio)*3];
+                    pz[y_e][x_e * 3 + 1] = pw[(int)(y_e*zoom_ratio)][(int)(pic_x*zoom_ratio)*3+1];
+                    pz[y_e][x_e * 3 + 2] = pw[(int)(y_e*zoom_ratio)][(int)(pic_x*zoom_ratio)*3+2];
+                    pic_x++;
+                } else
+                {
+                    pz[y_e][x_e * 3] = bgcolor&0xff;
+                    pz[y_e][x_e * 3 + 1] = (bgcolor>>8)&0xff;
+                    pz[y_e][x_e * 3 + 2] = (bgcolor>>16)&0xff;
+                }
+            }
+            pic_x = 0;
+        }
+
+//        pic_re->bmp_buf = (void *)pb;
+//        pic_re->width = (int)((float)pic->width/zoom_ratio);
+//        pic_re->height = height;
+
+    }else   //宽贴边
+    {
+        zoom_ratio = (float)pic->width/(float)width;
+        printf("zoom_ratio: %f\n", zoom_ratio);
+        char (* pw)[pic->width*3]  = (void *)pic->bmp_buf;
+
+        int y_y = (height - ((int)((float)pic->height/zoom_ratio)))/2; //实际图片到边缘的距离（黑色背景的宽度）
+        for(y_e=0; y_e<height; y_e++)
+        {
+            for (x_e = 0; x_e < width; x_e++)
+            {
+                if (y_e >= y_y && y_e < y_y + (int) ((float) pic->height / zoom_ratio))
+                {
+                    pz[y_e][x_e * 3] = pw[(int)(pic_y*zoom_ratio)][(int)(x_e*zoom_ratio)*3];
+                    pz[y_e][x_e * 3 + 1] = pw[(int)(pic_y*zoom_ratio)][(int)(x_e*zoom_ratio)*3+1];
+                    pz[y_e][x_e * 3 + 2] = pw[(int)(pic_y*zoom_ratio)][(int)(x_e*zoom_ratio)*3+2];
+
+                } else
+                {
+                    pz[y_e][x_e * 3] = bgcolor&0xff;
+                    pz[y_e][x_e * 3 + 1] = (bgcolor>>8)&0xff;
+                    pz[y_e][x_e * 3 + 2] = (bgcolor>>16)&0xff;
+                }
+            }
+            if (y_e >= y_y && y_e < y_y + (int) ((float) pic->height / zoom_ratio))
+            {
+                pic_y++;
+            }
+        }
+    }
+    pic_re->bmp_buf = (void *)pz;
+    pic_re->width = width;
+    pic_re->height = height;
+
+    return pic_re;
 }
 
 

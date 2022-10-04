@@ -25,6 +25,13 @@
 #define BMP_TYPE 0x4d42
 #define JPEG_TYPE 0xd8ff
 
+//一维数组坐标转换
+#define PIC_BUF(y,x) (*(pic->bmp_buf + (y)*pic->width*3 + (x)))
+#define PIC_RE_BUF(y,x) (*(pic_re->bmp_buf + (y)*pic_re->width*3 + (x)))
+#define w3(w) ((int)((w)+0.5)-(((int)((w)+0.5))%3))
+
+#define BG_COLOR 0xfaf6e9
+
 //双向链表成员节点
 typedef struct pic_t{
     bmp_t *pic;
@@ -43,10 +50,11 @@ struct pic_link{
 //图库管理结构体全局变量
 extern struct pic_link *gallery;
 
-//任意尺寸重建图片，黑底
+//任意尺寸重建图片
 //可将小图片等比例变大或大图片等比例缩小,注意及时free返回指针
-//入口参数：图片管理结构体，大小
-bmp_t *pic_rebuild(bmp_t *pic, unsigned int width, unsigned int height);
+//入口参数：图片管理结构体，指定图片大小，背景填充颜色
+//返回值：一个新的图片结构体
+bmp_t *pic_rebuild_pro(bmp_t *pic, unsigned int width, unsigned int height, unsigned int bgcolor);
 
 //文件名排序前比较算法
 //入口参数：对比对象，与被对比对象

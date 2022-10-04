@@ -24,6 +24,13 @@ bmp_t *open_bmp(char *path)
     read(fd_bmp, &bmp->width, 4);   //800
     read(fd_bmp, &bmp->height, 4);   //480
     printf("%s: height=%d, width=%d\n", path, bmp->height, bmp->width);
+    if((bmp->height*bmp->width)%4 != 0) //像素点不为4的倍数
+    {
+        printf("%s:Error, the image pixels in multiples of four!\n",path);
+        free(bmp);
+        close(fd_bmp);
+        return NULL;
+    }
 
     //去除掉它的头54个字节
     lseek(fd_bmp,54,SEEK_SET);

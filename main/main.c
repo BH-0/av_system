@@ -13,8 +13,9 @@ int main(int argc, char **argv)
 
     gallery = pic_link_init(); //初始化图库
 
-    pic_rebuild(NULL,1,2);
-
+    bmp_t *test1 = open_bmp("./pic/b4.bmp");
+    bmp_t *test2 = pic_rebuild_pro(test1,800,480, BG_COLOR);
+    show_bmp(LCD_addr,test2,0,0);
 
 #if 0 //进入线程
     while (1)
