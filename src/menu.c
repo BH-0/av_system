@@ -6,19 +6,47 @@
 
 
 //图片全屏滑动浏览界面
-//入口参数，图库链表某成员，会从此图片开始播放
-int pic_slid_show(pic_t **p)
+//入口参数，p:图库链表某成员，会从此图片开始播放，auto_cmd:0手动滑动 ，非0自动播放延时秒数
+int pic_slid_show(pic_t **p, float auto_sec)
 {
     //pic_t *p = gallery->head;
     bmp_t *pic = NULL;
     bmp_t *pic_next = NULL;
+    int num = 0;
+    int sum = 0;
 
     //先显示第一张图
     pic = pic_rebuild_pro((*p)->pic, 800, 480, 0); //图片尺寸转换
     printf("display:%s\n",(*p)->find_name);
     show_bmp(LCD_addr, pic, 0,0);
+
     while(1)
     {
+        if(auto_sec !=0)    //自动播放
+        {
+//            if(sum == 0)
+//                *p = gallery->head; //从第一张开始播放
+            while(1)
+            {
+                sum++;
+                sleep(auto_sec);
+                if(sum>=gallery->nodeNumber)
+                {
+                    destroy_bmp_t(pic);
+                    return -1; //返回上级菜单
+                }
+                if (num == 0)
+                {
+                    num = 1;
+                    goto next0;
+                } else if (num == 1)
+                {
+                    num = 0;
+                    goto next1;
+                }
+            }
+        }
+
         switch(get_xy_plus(fd_ts, &x_ts, &y_ts))
         {
             case up:
@@ -34,6 +62,7 @@ int pic_slid_show(pic_t **p)
                 pic=pic_next;
                 break;
             case down:
+            next1:
                 (*p) = (*p)->next;
                 pic_next = pic_rebuild_pro((*p)->pic, 800, 480, 0);   //图片尺寸转换
                 printf("display:%s\n",(*p)->find_name);
@@ -58,6 +87,7 @@ int pic_slid_show(pic_t **p)
                 pic=pic_next;
                 break;
             case right:
+            next0:
                 (*p) = (*p)->next;
                 pic_next = pic_rebuild_pro((*p)->pic, 800, 480, 0);   //图片尺寸转换
                 printf("display:%s\n",(*p)->find_name);
@@ -140,9 +170,12 @@ int pic_click_show()
                 sscanf(p->find_name, "%70s", buf);  //限制文件名域宽
                 sprintf(buf, "%s  %d*%d",buf,p->pic->width,p->pic->height);
                 Display_utf8(100,10,buf,0xffffff,1,1);
-            }else if(x_ts>90 && x_ts<710 && y_ts>35 && y_ts<475)  //全屏预览
+            }else if((x_ts>90 && x_ts<710 && y_ts>35 && y_ts<475) || touch_icon == 5)  //全屏预览
             {
-                pic_slid_show(&p);
+                if(touch_icon == 5)
+                    pic_slid_show(&p,2);  //自动播放
+                else
+                    pic_slid_show(&p,0);
 
                 //退出后重新显示
                 show_bmp(LCD_addr, bg, 0,0);    //显示背景

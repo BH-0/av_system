@@ -3,4 +3,5 @@ win_title,1,100,0
 win_X,2,760,0
 win_next,3,713,198
 win_prev,4,3,198
+win_auto,5,3,34
 
