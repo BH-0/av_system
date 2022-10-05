@@ -12,5 +12,7 @@
 #include "menu.h"
 #include "jpeg.h"
 #include "picture.h"
+#include "font.h"
+
 
 #endif //__MAIN_H

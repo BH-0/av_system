@@ -5,14 +5,16 @@ int main(int argc, char **argv)
     LCD_addr = LCD_init();
     fd_ts = touch_init("/dev/input/event0");
 
-    start_in = create_list_icon();  //初始化按钮图标管理结构体
-    icon_init(start_in,"./menu/start_in.txt");
+    Init_Font();    //初始化字库
 
+    start_in = create_list_icon();  //初始化按钮图标管理结构体
+    icon_init(start_in,"./menu/start_in.txt"); //导入图标组
     start_out = create_list_icon();  //初始化按钮图标管理结构体
-    icon_init(start_out,"./menu/start_out.txt");
+    icon_init(start_out,"./menu/start_out.txt"); //导入图标组
 
     gallery = pic_link_init(); //初始化图库
     print_allToList(gallery); //遍历链表
+
 
 //    bmp_t *test1 = open_bmp("./pic/b4.bmp");
 //    bmp_t *test2 = pic_rebuild_pro(test1,800,480, BG_COLOR);

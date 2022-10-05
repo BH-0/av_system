@@ -1,0 +1,11 @@
+#文件名(不带后缀),图标名,显示坐标x,显示坐标y
+start_out,0,0,435
+start_out_1,1,0,396
+start_out_2,2,0,352
+start_out_3,3,0,310
+start_out_4,4,0,270
+start_out_5,5,0,232
+start_out_6,6,0,192
+start_out_7,7,0,156
+start_out_8,8,0,112
+start_out_9,9,0,67

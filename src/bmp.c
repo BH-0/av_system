@@ -31,6 +31,13 @@ bmp_t *open_bmp(char *path)
         close(fd_bmp);
         return NULL;
     }
+    if((bmp->height*bmp->width)>2560*1440) //图片超大
+    {
+        printf("%s:Error, the image size is too big!\n",path);
+        free(bmp);
+        close(fd_bmp);
+        return NULL;
+    }
 
     //去除掉它的头54个字节
     lseek(fd_bmp,54,SEEK_SET);

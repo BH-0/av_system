@@ -15,16 +15,7 @@
     </configurations>
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="3aea8ea3-dfb5-4c5d-978c-c5903239cbc7" name="变更" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/av_system" beforeDir="false" afterPath="$PROJECT_DIR$/bin/av_system" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/bmp.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/bmp.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/menu.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/menu.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/main/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bmp.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/bmp.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/menu.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/picture.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/picture.c" afterDir="false" />
-    </list>
+    <list default="true" id="3aea8ea3-dfb5-4c5d-978c-c5903239cbc7" name="变更" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -109,7 +100,8 @@
       <workItem from="1664499261882" duration="18863000" />
       <workItem from="1664710405098" duration="14136000" />
       <workItem from="1664767774999" duration="45401000" />
-      <workItem from="1664877760674" duration="15267000" />
+      <workItem from="1664877760674" duration="15701000" />
+      <workItem from="1664933644506" duration="16994000" />
     </task>
     <servers />
   </component>

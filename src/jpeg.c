@@ -84,6 +84,15 @@ bmp_t *open_jpeg(char *pjpg_path)
         close(jpg_fd);
         return NULL;
     }
+    if((jpeg->height*jpeg->width)>2560*1440) //图片超大
+    {
+        printf("%s:Error, the image size is too big!\n",pjpg_path);
+        free(jpeg);
+        jpeg_finish_decompress(&cinfo); //销毁图片
+        jpeg_destroy_decompress(&cinfo);
+        close(jpg_fd);
+        return NULL;
+    }
 
     jpeg->bmp_buf = malloc(jpeg->width*jpeg->height*3);
 

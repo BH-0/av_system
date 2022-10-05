@@ -6,24 +6,25 @@
 
 
 //图片全屏滑动浏览界面
-int pic_slid_show()
+//入口参数，图库链表某成员，会从此图片开始播放
+int pic_slid_show(pic_t **p)
 {
-    pic_t *p = gallery->head;
+    //pic_t *p = gallery->head;
     bmp_t *pic = NULL;
     bmp_t *pic_next = NULL;
 
     //先显示第一张图
-    pic = pic_rebuild_pro(p->pic, 800, 480, 0); //图片尺寸转换
-    printf("display:%s\n",p->find_name);
+    pic = pic_rebuild_pro((*p)->pic, 800, 480, 0); //图片尺寸转换
+    printf("display:%s\n",(*p)->find_name);
     show_bmp(LCD_addr, pic, 0,0);
     while(1)
     {
         switch(get_xy_plus(fd_ts, &x_ts, &y_ts))
         {
             case up:
-                p = p->prev;
-                pic_next = pic_rebuild_pro(p->pic, 800, 480, 0);   //图片尺寸转换
-                printf("display:%s\n",p->find_name);
+                (*p) = (*p)->prev;
+                pic_next = pic_rebuild_pro((*p)->pic, 800, 480, 0);   //图片尺寸转换
+                printf("display:%s\n",(*p)->find_name);
 
                 //显示动画
                 show_bmp_plus(LCD_addr, (char (*)[800*3])pic->bmp_buf, \
@@ -33,9 +34,9 @@ int pic_slid_show()
                 pic=pic_next;
                 break;
             case down:
-                p = p->next;
-                pic_next = pic_rebuild_pro(p->pic, 800, 480, 0);   //图片尺寸转换
-                printf("display:%s\n",p->find_name);
+                (*p) = (*p)->next;
+                pic_next = pic_rebuild_pro((*p)->pic, 800, 480, 0);   //图片尺寸转换
+                printf("display:%s\n",(*p)->find_name);
 
                 //显示动画
                 show_bmp_plus(LCD_addr, (char (*)[800*3])pic->bmp_buf, \
@@ -45,9 +46,9 @@ int pic_slid_show()
                 pic=pic_next;
                 break;
             case left:
-                p = p->prev;
-                pic_next = pic_rebuild_pro(p->pic, 800, 480, 0);   //图片尺寸转换
-                printf("display:%s\n",p->find_name);
+                (*p) = (*p)->prev;
+                pic_next = pic_rebuild_pro((*p)->pic, 800, 480, 0);   //图片尺寸转换
+                printf("display:%s\n",(*p)->find_name);
 
                 //显示动画
                 show_bmp_plus(LCD_addr, (char (*)[800*3])pic->bmp_buf, \
@@ -57,9 +58,9 @@ int pic_slid_show()
                 pic=pic_next;
                 break;
             case right:
-                p = p->next;
-                pic_next = pic_rebuild_pro(p->pic, 800, 480, 0);   //图片尺寸转换
-                printf("display:%s\n",p->find_name);
+                (*p) = (*p)->next;
+                pic_next = pic_rebuild_pro((*p)->pic, 800, 480, 0);   //图片尺寸转换
+                printf("display:%s\n",(*p)->find_name);
 
                 //显示动画
                 show_bmp_plus(LCD_addr, (char (*)[800*3])pic->bmp_buf, \
@@ -80,11 +81,90 @@ int pic_slid_show()
 //图片窗口化点击浏览界面
 int pic_click_show()
 {
-    bmp_t *bmp[3] = {0};
-    bmp[0] = open_bmp("./menu/win.bmp");
-    show_bmp(LCD_addr, bmp[0], 0,0);
+    pic_t *p = gallery->head;  //获取图库头指针
+    bmp_t *pic = NULL;
 
-    while(1);
+    bmp_t *bg = open_bmp("./menu/win.bmp");
+    show_bmp(LCD_addr, bg, 0,0);    //显示背景
+
+
+    struct list_icon *pic_click = create_list_icon();  //初始化按钮图标管理结构体
+    icon_init(pic_click,"./menu/pic_click_show.txt"); //导入图标组
+    display_icons(LCD_addr, pic_click, 0);  //显示所有按钮
+
+    Display_utf8(WIN_TITLE_X,WIN_TITLE_Y,"图库预览",0xffffff,1,1);  //显示标题
+
+    //先显示第一张图
+    pic = pic_rebuild_pro(p->pic, 620, 440, BG_COLOR); //图片尺寸转换
+    printf("display:%s\n",p->find_name);
+    show_bmp(LCD_addr, pic, 90,35);
+
+    //显示当前图片信息
+    char buf[128]= {0};
+    sscanf(p->find_name, "%70s", buf);  //限制文件名域宽
+    sprintf(buf, "%s  %d*%d",buf,p->pic->width,p->pic->height);
+    Display_utf8(100,10,buf,0xffffff,1,1);
+
+    while(1)
+    {
+        if(get_xy(fd_ts, &x_ts, &y_ts) == 0)    //松手
+        {
+            int touch_icon = touch_button(pic_click, x_ts, y_ts);
+            if(touch_icon == 2) //退出
+            {
+                break;
+            }else if(touch_icon == 3)   //下一张
+            {
+                destroy_bmp_t(pic); //销毁上一张图片
+                p = p->next;
+                pic = pic_rebuild_pro(p->pic, 620, 440, BG_COLOR);   //图片尺寸转换
+                show_bmp(LCD_addr, pic, 90,35);
+
+                //显示当前图片信息
+                display_icons(LCD_addr, pic_click, 1);  //覆写标题栏
+                char buf[128]= {0};
+                sscanf(p->find_name, "%70s", buf);  //限制文件名域宽
+                sprintf(buf, "%s  %d*%d",buf,p->pic->width,p->pic->height);
+                Display_utf8(100,10,buf,0xffffff,1,1);
+
+            }else if(touch_icon == 4)   //上一张
+            {
+                destroy_bmp_t(pic); //销毁上一张图片
+                p = p->prev;
+                pic = pic_rebuild_pro(p->pic, 620, 440, BG_COLOR);   //图片尺寸转换
+                show_bmp(LCD_addr, pic, 90,35);
+
+                //显示当前图片信息
+                display_icons(LCD_addr, pic_click, 1);  //覆写标题栏
+                char buf[128]= {0};
+                sscanf(p->find_name, "%70s", buf);  //限制文件名域宽
+                sprintf(buf, "%s  %d*%d",buf,p->pic->width,p->pic->height);
+                Display_utf8(100,10,buf,0xffffff,1,1);
+            }else if(x_ts>90 && x_ts<710 && y_ts>35 && y_ts<475)  //全屏预览
+            {
+                pic_slid_show(&p);
+
+                //退出后重新显示
+                show_bmp(LCD_addr, bg, 0,0);    //显示背景
+                display_icons(LCD_addr, pic_click, 0);  //显示所有按钮
+                Display_utf8(WIN_TITLE_X,WIN_TITLE_Y,"图库预览",0xffffff,1,1);  //显示标题
+
+                //先显示第一张图
+                pic = pic_rebuild_pro(p->pic, 620, 440, BG_COLOR); //图片尺寸转换
+                printf("display:%s\n",p->find_name);
+                show_bmp(LCD_addr, pic, 90,35);
+
+                //显示当前图片信息
+                char buf[128]= {0};
+                sscanf(p->find_name, "%70s", buf);  //限制文件名域宽
+                sprintf(buf, "%s  %d*%d",buf,p->pic->width,p->pic->height);
+                Display_utf8(100,10,buf,0xffffff,1,1);
+            }
+        }
+    }
+    destroy_bmp_t(pic); //销毁预览图
+    destroy_bmp_t(bg);  //销毁背景
+    del_icon(pic_click);    //销毁图标
     return 0;
 }
 
@@ -122,7 +202,7 @@ int menu_start()
                     break;
                 case 8: //图片
                 printf("8\n");
-                    pic_slid_show();
+                    pic_click_show();
                     return 0;
                     break;
                 case 9: //download
