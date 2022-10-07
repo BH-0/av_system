@@ -155,9 +155,10 @@ void del_icon(struct list_icon *listHead)
 {
     bmp_icon *p = listHead->head;
     bmp_icon *p_next = listHead->head;
+    int i = 0;
     if(listHead == NULL)
         return;
-    while (p)
+    while (i < listHead->icon_number)
     {
         p_next = p->next;
         free(p->bmp->bmp_buf);
@@ -166,6 +167,7 @@ void del_icon(struct list_icon *listHead)
         p->bmp = NULL;
         free(p);
         p = p_next;
+        i++;
     }
     listHead->head = listHead->tail = NULL;
     free(listHead);

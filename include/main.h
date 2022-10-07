@@ -13,6 +13,7 @@
 #include "jpeg.h"
 #include "picture.h"
 #include "font.h"
+#include "mplayer.h"
 
 
 #endif //__MAIN_H

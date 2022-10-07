@@ -1,0 +1,11 @@
+#文件名(不带后缀),图标名,显示坐标x,显示坐标y
+win_title,1,100,0
+win_X,2,760,0
+player_stop,3,8,421
+player_star,4,8,421
+player_prev,5,92,421
+player_next,6,136,421
+player_vol-,7,184,401
+player_vol+,8,256,401
+player_FR,9,8,398
+player_FF,10,724,398

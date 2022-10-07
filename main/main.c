@@ -13,27 +13,37 @@ int main(int argc, char **argv)
     icon_init(start_out,"./menu/start_out.txt"); //导入图标组
 
     gallery = pic_link_init(); //初始化图库
-    print_allToList(gallery); //遍历链表
+//    print_allToList(gallery); //遍历链表
 
 
-//    bmp_t *test1 = open_bmp("./pic/b4.bmp");
-//    bmp_t *test2 = pic_rebuild_pro(test1,800,480, BG_COLOR);
-//    show_bmp(LCD_addr,test2,0,0);
+#if 0
 
 
-    //pic_touch_show();    //图片全屏滑动浏览界面
+    system("killall -SIGKILL  mplayer");    //杀死进程
+
+    system("mkfifo /tmp/fifo_cmd"); //创建管道文件
+    //通过管道控制
+    //不打印信息并且后台运行
+    system("mplayer -af volume=-10 -softvol -softvol-max 80 -cache 8192 -slave -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/Bad_Apple.mp4 &");
+    sleep(3);
+    system("echo \"volume 40 1\n\" > /tmp/fifo_cmd ");    //40为音量默认值，音量最大80
+
+    sleep(5);
+
+//    system("killall -SIGSTOP mplayer &");   //暂停
+//
+//    system("killall -SIGCONT mplayer"); //继续
+    system("echo \"p\n\" > /tmp/fifo_cmd ");    //暂停
+    sleep(3);
+    system("echo \"q\n\" > /tmp/fifo_cmd ");    //退出
+
+    printf("finished\n");
+#endif
 
 #if 1 //进入线程
     while (1)
     {
         menu_main();
-//        show_bmp(LCD_addr,bmp[0],0,0); //桌面
-//        display_icons(LCD_addr, start_in, 0);  //显示所有按钮
-//
-//        sleep(1);
-//
-//        display_icons(LCD_addr, start_out, 0);  //显示所有按钮
-//        sleep(1);
     }
 #endif
     return 0;
