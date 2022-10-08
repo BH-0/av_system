@@ -6,6 +6,9 @@
 //此文件封装mplayer播放器功能
 //----------------------------------------------------------------
 
+//媒体列表全局变量
+struct file_link *mp3_file = NULL;
+struct file_link *mp4_file = NULL;
 
 //文件后缀判断函数
 int file_suffix_judgment_pro(char *filename,char *file_suffix)
@@ -141,7 +144,7 @@ void destroy_file_link(struct file_link *listHead)
     while(i < listHead->nodeNumber)
     {
         dp = p;
-        printf("--%s\n",p->find_name);
+        //printf("--%s\n",p->find_name);
         free(dp);
         p = p->next;
         i++;

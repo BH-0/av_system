@@ -88,13 +88,15 @@ bmp_icon *insert_list_icon(struct list_icon *listHead, char *path, int name, int
 bmp_icon *find_icon(struct list_icon *listHead, int name)
 {
     bmp_icon *p = listHead->head;
-    while (p)
+    int i = 0;
+    while (i < listHead->icon_number)
     {
         if(p->name == name)
             break;
         p = p->next;
+        i++;
     }
-    if(p == NULL)
+    if(i == listHead->icon_number)
     {
         printf("icon name not find\n");
         return NULL;
@@ -115,10 +117,12 @@ int display_icons(int (*LCD_addr)[800], struct list_icon *listHead, int name)
     bmp_icon *p = listHead->head;
     if(name == 0)    //显示全部
     {
-        while (p)
+        int i = 0;
+        while (i < listHead->icon_number)
         {
             display_icon(LCD_addr, p); //显示图标
             p = p->next;
+            i++;
         }
     }else   //显示单张
     {
@@ -137,17 +141,22 @@ int display_icons(int (*LCD_addr)[800], struct list_icon *listHead, int name)
 int touch_button(struct list_icon *listHead, int x, int y)
 {
     bmp_icon *p = listHead->head;
-    while (p)
+    int i = 0;
+    while (i < listHead->icon_number)
     {
         if(x>p->x && x<(p->x+p->bmp->width) && y>p->y && y<(p->y+p->bmp->height))
             break;
+        printf("111\n");
+        i++;
         p = p->next;
     }
-    if(p == NULL)
+    if(i == listHead->icon_number)
     {
         return -1; //按到了其他地方
     }else
+    {
         return p->name;
+    }
 }
 
 //销毁一组图标，入口参数：图标管理结构体

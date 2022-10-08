@@ -18,11 +18,9 @@
     <list default="true" id="3aea8ea3-dfb5-4c5d-978c-c5903239cbc7" name="变更" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/av_system" beforeDir="false" afterPath="$PROJECT_DIR$/bin/av_system" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/include/menu.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/menu.h" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bmp.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/bmp.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jpeg.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/jpeg.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/main/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.c" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/icon.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/icon.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/menu.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mplayer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mplayer.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,7 +110,7 @@
       <workItem from="1664877760674" duration="15701000" />
       <workItem from="1664933644506" duration="41794000" />
       <workItem from="1665128243506" duration="24746000" />
-      <workItem from="1665187515360" duration="12811000" />
+      <workItem from="1665187515360" duration="16486000" />
     </task>
     <servers />
   </component>

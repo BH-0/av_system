@@ -15,6 +15,8 @@ int main(int argc, char **argv)
     gallery = pic_link_init(); //初始化图库
 //    print_allToList(gallery); //遍历链表
 
+    mp3_file = file_link_init("./mp3_mp4", ".mp3");    //导入MP3文件列表
+    mp4_file = file_link_init("./mp3_mp4", ".mp4");    //导入MP4文件列表
 
 #if 0
 
@@ -39,6 +41,8 @@ int main(int argc, char **argv)
 
     printf("finished\n");
 #endif
+
+
 
 #if 1 //进入线程
     while (1)

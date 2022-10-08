@@ -24,19 +24,17 @@ int mp3_mp4_player(int mp3_or_mp4)
     icon_init(player,"./menu/player.txt"); //导入图标组
 
     file_t *file = NULL;
-    struct file_link *mp3_file = NULL;
     if(mp3_or_mp4 == 0)
     {
         Display_utf8(WIN_TITLE_X, WIN_TITLE_Y, "千千静听", 0xffffff, 1, 1);  //显示标题
-
-        mp3_file = file_link_init("./mp3_mp4", ".mp3");    //导入MP3文件列表
+        file = mp3_file->head;    //当前播放
     }else
     {
         Display_utf8(WIN_TITLE_X, WIN_TITLE_Y, "暴风影音", 0xffffff, 1, 1);  //显示标题
-
-        mp3_file = file_link_init("./mp3_mp4", ".mp4");    //导入MP4文件列表
+        file = mp4_file->head;    //当前播放
     }
-    file = mp3_file->head;    //当前播放
+
+
 
     display_icons(LCD_addr, player_vol, 40);   //显示默认音量
 
@@ -261,7 +259,7 @@ int mp3_mp4_player(int mp3_or_mp4)
     destroy_bmp_t(bg);  //销毁背景
     del_icon(player_vol);    //销毁图标
     del_icon(player);    //销毁图标
-    destroy_file_link(mp3_file); //销毁mp3_file
+    //destroy_file_link(mp3_file); //销毁mp3_file
     return 0;
 }
 
@@ -276,7 +274,6 @@ int pic_slid_show(pic_t **p, float auto_sec)
     bmp_t *pic_next = NULL;
     int num = 0;
     int sum = 0;
-
     //先显示第一张图
     pic = pic_rebuild_pro((*p)->pic, 800, 480, 0); //图片尺寸转换
     printf("display:%s\n",(*p)->find_name);
@@ -402,6 +399,7 @@ int pic_click_show()
         if(get_xy(fd_ts, &x_ts, &y_ts) == 0)    //松手
         {
             int touch_icon = touch_button(pic_click, x_ts, y_ts);
+            printf("touch_icon: %d\n", touch_icon);
             if(touch_icon == 2) //退出
             {
                 break;

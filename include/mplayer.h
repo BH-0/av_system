@@ -36,6 +36,10 @@ struct file_link{
     int nodeNumber;//保存链表结点的数量
 };
 
+//媒体列表全局变量
+extern struct file_link *mp3_file;
+extern struct file_link *mp4_file;
+
 // 设置音量
 int general_volume(int* data);
 
