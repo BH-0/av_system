@@ -122,22 +122,32 @@ void destroy_file_link(struct file_link *listHead)
 {
     if(listHead == NULL)
         return;
-    if(listHead->nodeNumber == 0 ||listHead->head == NULL)
+    if(listHead->nodeNumber == 0)
+    {
+
+        free(listHead);
+        return;
+    }
+    if(listHead->head == NULL)
     {
         free(listHead);
         return;
     }
+
     file_t *dp = NULL;
     file_t *p = listHead->head;
     int i = 0;
+
     while(i < listHead->nodeNumber)
     {
         dp = p;
+        printf("--%s\n",p->find_name);
         free(dp);
         p = p->next;
         i++;
     }
     free(listHead);
+
 }
 
 #if 0

@@ -84,7 +84,7 @@ bmp_t *open_jpeg(char *pjpg_path)
         close(jpg_fd);
         return NULL;
     }
-    if((jpeg->height*jpeg->width)>2560*1440) //图片超大
+    if((jpeg->height*jpeg->width)>2560*2560) //图片超大
     {
         printf("%s:Error, the image size is too big!\n",pjpg_path);
         free(jpeg);

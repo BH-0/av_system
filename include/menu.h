@@ -18,8 +18,6 @@
 #define WIN_TITLE_X 28
 #define WIN_TITLE_Y 8
 
-//mp3
-int mp3();
 
 //当点击开始时，此函数被调用
 int menu_start();

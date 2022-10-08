@@ -4,14 +4,15 @@
 //----------------------------------------------------------------
 
 
-
-
-
-
-//mp3 播放页面
-int mp3_player()
+//播放页面
+//入口参数：0：mp3 1：mp4
+int mp3_mp4_player(int mp3_or_mp4)
 {
-    bmp_t *bg = open_bmp("./menu/player.bmp");
+    bmp_t *bg = NULL;
+    if(mp3_or_mp4 == 0)
+        bg = open_bmp("./menu/player.bmp");
+    else
+        bg = open_bmp("./menu/player_x.bmp");
     show_bmp(LCD_addr, bg, 0,0);    //显示背景
     unsigned int vol = 40;
     char buf[256]= {0};
@@ -22,16 +23,26 @@ int mp3_player()
     struct list_icon *player = create_list_icon();  //初始化按钮图标管理结构体
     icon_init(player,"./menu/player.txt"); //导入图标组
 
-    Display_utf8(WIN_TITLE_X,WIN_TITLE_Y,"千千静听",0xffffff,1,1);  //显示标题
+    file_t *file = NULL;
+    struct file_link *mp3_file = NULL;
+    if(mp3_or_mp4 == 0)
+    {
+        Display_utf8(WIN_TITLE_X, WIN_TITLE_Y, "千千静听", 0xffffff, 1, 1);  //显示标题
 
-    struct file_link *mp3_file = file_link_init("./mp3_mp4",".mp3");    //导入MP3文件列表
-    file_t *mp3 = mp3_file->head;    //当前播放
+        mp3_file = file_link_init("./mp3_mp4", ".mp3");    //导入MP3文件列表
+    }else
+    {
+        Display_utf8(WIN_TITLE_X, WIN_TITLE_Y, "暴风影音", 0xffffff, 1, 1);  //显示标题
+
+        mp3_file = file_link_init("./mp3_mp4", ".mp4");    //导入MP4文件列表
+    }
+    file = mp3_file->head;    //当前播放
 
     display_icons(LCD_addr, player_vol, 40);   //显示默认音量
 
     //显示当前媒体信息
     display_icons(LCD_addr, player, 1);  //覆写标题栏
-    sscanf(mp3->find_name, "%70s", buf);  //限制文件名域宽
+    sscanf(file->find_name, "%70s", buf);  //限制文件名域宽
     Display_utf8(100,10,buf,0xffffff,1,1);
 
     while(1) {
@@ -43,10 +54,12 @@ int mp3_player()
                 if(init == 1)
                 {
                     system("echo \"q\n\" > /tmp/fifo_cmd ");    //退出
-                    system("echo \"q\n\" > /tmp/fifo_cmd_b ");    //退出
+                    if(mp3_or_mp4 == 0)
+                        system("echo \"q\n\" > /tmp/fifo_cmd_b ");    //退出
                     system("killall -SIGKILL  mplayer");    //杀死进程
                     system("rm /tmp/fifo_cmd");    //清空管道
-                    system("rm /tmp/fifo_cmd_b");    //清空管道
+                    if(mp3_or_mp4 == 0)
+                        system("rm /tmp/fifo_cmd_b");    //清空管道
                 }
                 break;
             } else if (touch_icon == 3 || touch_icon == 4)   //播放暂停
@@ -55,16 +68,28 @@ int mp3_player()
                 {
                     system("killall -SIGKILL  mplayer");    //杀死进程
                     system("rm /tmp/fifo_cmd");    //清空管道
-                    system("rm /tmp/fifo_cmd_b");    //清空管道
+                    if(mp3_or_mp4 == 0)
+                        system("rm /tmp/fifo_cmd_b");    //清空管道
                     system("mkfifo /tmp/fifo_cmd"); //创建管道文件
-                    system("mkfifo /tmp/fifo_cmd_b"); //创建管道文件
-                    //单曲循环，永不退出
-                    sprintf(buf, "mplayer -idle -loop 0 -af volume=-10 -softvol -softvol-max 80 -cache 8192 -slave \
-                           -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &",mp3->find_name);
-                    system(buf);
-                    //显示音乐可视化
-                    system("mplayer -geometry 25:65 -zoom -x 515 -y 333 -idle -loop 0 -af -cache 8192 -slave \
+                    if(mp3_or_mp4 == 0)
+                        system("mkfifo /tmp/fifo_cmd_b"); //创建管道文件
+                    if(mp3_or_mp4 == 0)
+                    {
+                        //单曲循环，永不退出
+                        sprintf(buf, "mplayer -idle -loop 0 -af volume=-10 -softvol -softvol-max 80 -cache 8192 -slave \
+                           -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &", file->find_name);
+                        system(buf);
+                        //显示音乐可视化
+                        system("mplayer -geometry 25:65 -zoom -x 515 -y 333 -idle -loop 0 -af -cache 8192 -slave \
                            -input file=/tmp/fifo_cmd_b -quiet ./menu/Windows_Welcome_music.h264.m4v &");
+                    }else
+                    {
+                        //单曲循环，永不退出
+                        sprintf(buf, "mplayer -af volume=-10 -softvol -softvol-max 80 \
+                            -geometry 103:64 -zoom -x 594 -y 334 -idle -loop 0 -cache 8192 -slave \
+                           -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &", file->find_name);
+                        system(buf);
+                    }
                     display_icons(LCD_addr, player, 3);   //显示暂停图标
                     sprintf(buf, "echo \"volume %u 1\n\" >> /tmp/fifo_cmd ",vol);
                     system(buf);    //40为音量默认值，音量最大80
@@ -75,24 +100,27 @@ int mp3_player()
                     display_icons(LCD_addr, player, 3);   //显示暂停图标
                     //system("killall -SIGCONT mplayer"); //继续
                     system("echo \"p\n\" >> /tmp/fifo_cmd ");
-                    system("echo \"p\n\" >> /tmp/fifo_cmd_b ");
+                    if(mp3_or_mp4 == 0)
+                        system("echo \"p\n\" >> /tmp/fifo_cmd_b ");
                     start_bit = 1;
                 }else   //播放状态暂停
                 {
                     display_icons(LCD_addr, player, 4);   //显示播放图标
                     //system("killall -SIGSTOP mplayer &");   //暂停
                     system("echo \"p\n\" >> /tmp/fifo_cmd ");
-                    system("echo \"p\n\" >> /tmp/fifo_cmd_b ");
+                    if(mp3_or_mp4 == 0)
+                        system("echo \"p\n\" >> /tmp/fifo_cmd_b ");
                     start_bit = 0;
                 }
 
 
-            } else if (touch_icon == 7 && init == 1)   //vol--
+            } else if (touch_icon == 7 && init == 1)   //vol------------
             {
                 if(start_bit == 0)
                 {
                     display_icons(LCD_addr, player, 3);   //显示暂停图标
-                    system("echo \"p\n\" >> /tmp/fifo_cmd_b "); //让可视化音频继续播放
+                    if(mp3_or_mp4 == 0)
+                        system("echo \"p\n\" >> /tmp/fifo_cmd_b "); //让可视化音频继续播放
                 }
                 start_bit = 1;
                 vol = (vol-8)<0? 0 : (vol-8);
@@ -105,12 +133,13 @@ int mp3_player()
                 }
                 sprintf(buf, "echo \"volume %u 1\n\" >> /tmp/fifo_cmd ",vol);
                 system(buf);    //40为音量默认值，音量最大80
-            } else if (touch_icon == 8 && init == 1)  //vol++
+            } else if (touch_icon == 8 && init == 1)  //vol++++++++++
             {
                 if(start_bit == 0)
                 {
                     display_icons(LCD_addr, player, 3);   //显示暂停图标
-                    system("echo \"p\n\" >> /tmp/fifo_cmd_b "); //让可视化音频继续播放
+                    if(mp3_or_mp4 == 0)
+                        system("echo \"p\n\" >> /tmp/fifo_cmd_b "); //让可视化音频继续播放
                 }
                 start_bit = 1;
                 vol = (vol+8)>80? 80 : (vol+8);
@@ -122,8 +151,8 @@ int mp3_player()
                 if(start_bit == 0)
                 {
                     display_icons(LCD_addr, player, 3);   //显示暂停图标
-                    system("echo \"p\n\" >> /tmp/fifo_cmd_b "); //让可视化音频继续播放
-
+                    if(mp3_or_mp4 == 0)
+                        system("echo \"p\n\" >> /tmp/fifo_cmd_b "); //让可视化音频继续播放
                 }
                 sprintf(buf, "echo \"seek %d\n\" >> /tmp/fifo_cmd ",-10);
                 system(buf);
@@ -134,7 +163,8 @@ int mp3_player()
                 if(start_bit == 0)
                 {
                     display_icons(LCD_addr, player, 3);   //显示暂停图标
-                    system("echo \"p\n\" >> /tmp/fifo_cmd_b "); //让可视化音频继续播放
+                    if(mp3_or_mp4 == 0)
+                        system("echo \"p\n\" >> /tmp/fifo_cmd_b "); //让可视化音频继续播放
                 }
                 sprintf(buf, "echo \"seek %d\n\" >> /tmp/fifo_cmd ",10);
                 system(buf);
@@ -142,22 +172,35 @@ int mp3_player()
 
             } else if (touch_icon == 5)   //上一首
             {
-                mp3 = mp3->prev;
+                file = file->prev;
 
                 system("echo \"q\n\" > /tmp/fifo_cmd ");    //退出
-                system("echo \"q\n\" > /tmp/fifo_cmd_b ");    //退出
+                if(mp3_or_mp4 == 0)
+                    system("echo \"q\n\" > /tmp/fifo_cmd_b ");    //退出
                 system("killall -SIGKILL  mplayer");    //杀死进程
                 system("rm /tmp/fifo_cmd");    //清空管道
-                system("rm /tmp/fifo_cmd_b");    //清空管道
+                if(mp3_or_mp4 == 0)
+                    system("rm /tmp/fifo_cmd_b");    //清空管道
                 system("mkfifo /tmp/fifo_cmd"); //创建管道文件
-                system("mkfifo /tmp/fifo_cmd_b"); //创建管道文件
-                //单曲循环，永不退出
-                sprintf(buf, "mplayer -idle -loop 0 -af volume=-10 -softvol -softvol-max 80 -cache 8192 -slave \
-                       -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &",mp3->find_name);
-                system(buf);
-                //显示音乐可视化
-                system("mplayer -geometry 25:65 -zoom -x 515 -y 333 -idle -loop 0 -af -cache 8192 -slave \
+                if(mp3_or_mp4 == 0)
+                    system("mkfifo /tmp/fifo_cmd_b"); //创建管道文件
+                if(mp3_or_mp4 == 0)
+                {
+                    //单曲循环，永不退出
+                    sprintf(buf, "mplayer -idle -loop 0 -af volume=-10 -softvol -softvol-max 80 -cache 8192 -slave \
+                       -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &", file->find_name);
+                    system(buf);
+                    //显示音乐可视化
+                    system("mplayer -geometry 25:65 -zoom -x 515 -y 333 -idle -loop 0 -af -cache 8192 -slave \
                            -input file=/tmp/fifo_cmd_b -quiet ./menu/Windows_Welcome_music.h264.m4v &");
+                }else
+                {
+                    //单曲循环，永不退出
+                    sprintf(buf, "mplayer -af volume=-10 -softvol -softvol-max 80 \
+                            -geometry 103:64 -zoom -x 594 -y 334 -idle -loop 0 -cache 8192 -slave \
+                           -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &", file->find_name);
+                    system(buf);
+                }
                 display_icons(LCD_addr, player, 3);   //显示暂停图标
                 sprintf(buf, "echo \"volume %u 1\n\" >> /tmp/fifo_cmd ",vol);
                 system(buf);    //40为音量默认值，音量最大80
@@ -166,27 +209,40 @@ int mp3_player()
 
                 //显示当前图片信息
                 display_icons(LCD_addr, player, 1);  //覆写标题栏
-                sscanf(mp3->find_name, "%70s", buf);  //限制文件名域宽
+                sscanf(file->find_name, "%70s", buf);  //限制文件名域宽
                 Display_utf8(100,10,buf,0xffffff,1,1);
 
 
             } else if (touch_icon == 6)  //下一首
             {
-                mp3 = mp3->next;
-
+                file = file->next;
                 system("echo \"q\n\" > /tmp/fifo_cmd ");    //退出
+                if(mp3_or_mp4 == 0)
+                    system("echo \"q\n\" > /tmp/fifo_cmd_b ");    //退出
                 system("killall -SIGKILL  mplayer");    //杀死进程
                 system("rm /tmp/fifo_cmd");    //清空管道
-                system("rm /tmp/fifo_cmd_b");    //清空管道
+                if(mp3_or_mp4 == 0)
+                    system("rm /tmp/fifo_cmd_b");    //清空管道
                 system("mkfifo /tmp/fifo_cmd"); //创建管道文件
-                system("mkfifo /tmp/fifo_cmd_b"); //创建管道文件
-                //单曲循环，永不退出
-                sprintf(buf, "mplayer -idle -loop 0 -af volume=-10 -softvol -softvol-max 80 -cache 8192 -slave \
-                       -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &",mp3->find_name);
-                system(buf);
-                //显示音乐可视化
-                system("mplayer -geometry 25:65 -zoom -x 515 -y 333 -idle -loop 0 -af -cache 8192 -slave \
+                if(mp3_or_mp4 == 0)
+                    system("mkfifo /tmp/fifo_cmd_b"); //创建管道文件
+                if(mp3_or_mp4 == 0)
+                {
+                    //单曲循环，永不退出
+                    sprintf(buf, "mplayer -idle -loop 0 -af volume=-10 -softvol -softvol-max 80 -cache 8192 -slave \
+                       -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &", file->find_name);
+                    system(buf);
+                    //显示音乐可视化
+                    system("mplayer -geometry 25:65 -zoom -x 515 -y 333 -idle -loop 0 -af -cache 8192 -slave \
                            -input file=/tmp/fifo_cmd_b -quiet ./menu/Windows_Welcome_music.h264.m4v &");
+                }else
+                {
+                    //单曲循环，永不退出
+                    sprintf(buf, "mplayer -af volume=-10 -softvol -softvol-max 80 \
+                            -geometry 103:64 -zoom -x 594 -y 334 -idle -loop 0 -cache 8192 -slave \
+                           -input file=/tmp/fifo_cmd -quiet ./mp3_mp4/%s &", file->find_name);
+                    system(buf);
+                }
                 display_icons(LCD_addr, player, 3);   //显示暂停图标
                 sprintf(buf, "echo \"volume %u 1\n\" >> /tmp/fifo_cmd ",vol);
                 system(buf);    //40为音量默认值，音量最大80
@@ -195,17 +251,17 @@ int mp3_player()
 
                 //显示当前图片信息
                 display_icons(LCD_addr, player, 1);  //覆写标题栏
-                sscanf(mp3->find_name, "%70s", buf);  //限制文件名域宽
+                sscanf(file->find_name, "%70s", buf);  //限制文件名域宽
                 Display_utf8(100,10,buf,0xffffff,1,1);
 
             }
         }
     }
-    destroy_file_link(mp3_file); //销毁mp3_file
+
     destroy_bmp_t(bg);  //销毁背景
     del_icon(player_vol);    //销毁图标
     del_icon(player);    //销毁图标
-
+    destroy_file_link(mp3_file); //销毁mp3_file
     return 0;
 }
 
@@ -435,10 +491,11 @@ int menu_start()
                     break;
                 case 6: //视频
                 printf("6\n");
-                    break;
+                    mp3_mp4_player(1);
+                    return 0;
                 case 7: //千千静听
                 printf("7\n");
-                    mp3_player();
+                    mp3_mp4_player(0);
                     return 0;
                 case 8: //图片
                 printf("8\n");
