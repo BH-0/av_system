@@ -1,4 +1,7 @@
 #include "icon.h"
+//----------------------------------------------------------------
+//此为图标按钮相关程序
+//----------------------------------------------------------------
 
 //图标管理结构体指针全局变量
 struct list_icon *start_in;
@@ -146,7 +149,6 @@ int touch_button(struct list_icon *listHead, int x, int y)
     {
         if(x>p->x && x<(p->x+p->bmp->width) && y>p->y && y<(p->y+p->bmp->height))
             break;
-        printf("111\n");
         i++;
         p = p->next;
     }

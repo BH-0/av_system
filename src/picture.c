@@ -1,10 +1,7 @@
 #include "picture.h"
-
 //----------------------------------------------------------------
 //图库处理程序
 //----------------------------------------------------------------
-//进入图库程序后自动扫描文件夹下所有文件
-//先不考虑下载，先实现本地图库预览
 
 //图库管理结构体全局变量
 struct pic_link *gallery;
@@ -320,3 +317,11 @@ void print_allToList(struct pic_link *listHead)
         i++;
     }
 }
+/*
+//删除节点
+void destroy_pic_t(struct pic_link *listHead,pic_t *pic)
+{
+    pic_t *dp = pic;
+
+}
+*/

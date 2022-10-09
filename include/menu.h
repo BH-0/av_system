@@ -11,9 +11,11 @@
 #include "bmp.h"
 #include "touch.h"
 #include "icon.h"
+#include "jpeg.h"
 #include "picture.h"
 #include "font.h"
 #include "mplayer.h"
+#include "api.h"
 
 #define WIN_TITLE_X 28
 #define WIN_TITLE_Y 8

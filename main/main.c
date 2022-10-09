@@ -1,9 +1,11 @@
 #include "main.h"
-
+//----------------------------------------------------------------
+//此为主程序，所有程序的入口
+//----------------------------------------------------------------
 int main(int argc, char **argv)
 {
-    LCD_addr = LCD_init();
-    fd_ts = touch_init("/dev/input/event0");
+    LCD_addr = LCD_init();  //初始化LCD显示
+    fd_ts = touch_init("/dev/input/event0");    //初始化触摸屏
 
     Init_Font();    //初始化字库
 
@@ -42,7 +44,13 @@ int main(int argc, char **argv)
     printf("finished\n");
 #endif
 
-
+#if 0
+    //下图
+    char *url = get_jpg_api();  //获取一张图片的地址
+    char buf[1024];
+    sprintf(buf, "/tmp/%s",get_find_name(url)); //设定下载路径
+    download_jpg(url,buf);
+#endif
 
 #if 1 //进入线程
     while (1)

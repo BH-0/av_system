@@ -1,4 +1,7 @@
 #include "jpeg.h"
+//----------------------------------------------------------------
+//此为jpeg图片相关程序
+//----------------------------------------------------------------
 
 static char g_color_buf[FB_SIZE]={0};
 
@@ -79,7 +82,7 @@ bmp_t *open_jpeg(char *pjpg_path)
     {
         printf("%s:Error, the image pixels in multiples of four!\n",pjpg_path);
         free(jpeg);
-        jpeg_finish_decompress(&cinfo); //销毁图片
+        //jpeg_finish_decompress(&cinfo); //销毁图片
         jpeg_destroy_decompress(&cinfo);
         close(jpg_fd);
         return NULL;
@@ -88,7 +91,7 @@ bmp_t *open_jpeg(char *pjpg_path)
     {
         printf("%s:Error, the image size is too big!\n",pjpg_path);
         free(jpeg);
-        jpeg_finish_decompress(&cinfo); //销毁图片
+        //jpeg_finish_decompress(&cinfo); //销毁图片
         jpeg_destroy_decompress(&cinfo);
         close(jpg_fd);
         return NULL;

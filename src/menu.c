@@ -1,7 +1,114 @@
 #include "menu.h"
 //----------------------------------------------------------------
-//此文件为菜单文件，所有菜单显示和切换在此处实现
+//此文件为菜单文件，所有主要程序功能此处实现
 //----------------------------------------------------------------
+
+//用户管理
+int usr_data()
+{
+    bmp_t *bg = NULL;
+    bg = open_bmp("./menu/usr_data.bmp");
+    show_bmp(LCD_addr, bg, 0, 0);    //显示背景
+}
+
+//随机图片
+int api_jpg() {
+    bmp_t *bg = NULL;
+    bg = open_bmp("./menu/download.bmp");
+    show_bmp(LCD_addr, bg, 0, 0);    //显示背景
+    destroy_bmp_t(bg);  //销毁背景
+    int collect_bit = 0;    //收藏标志
+    char buf[512];
+    bmp_t *jpg_buf = NULL;
+    bmp_t *dp = NULL;
+    char *url = NULL;
+    struct list_icon *api_jpg = create_list_icon();  //初始化按钮图标管理结构体
+    icon_init(api_jpg, "./menu/api_jpg.txt"); //导入图标组
+
+    Display_utf8(WIN_TITLE_X, WIN_TITLE_Y, "动漫星城", 0xffffff, 1, 1);  //显示标题
+    Display_utf8(250, 220, "图片加载中...", 0x000000, 2, 1);
+
+    //下载第一张图
+    while (1) //循环获取，找到符合条件的图片
+    {
+        url = get_jpg_api();  //获取一张图片的地址
+        download_jpg(url, "/tmp/1.jpg"); //下载图片
+        dp = open_jpeg("/tmp/1.jpg");
+        if (dp != NULL)
+            break;
+        else
+            sleep(0.5);
+    }
+    jpg_buf = pic_rebuild_pro(dp, 708, 440, BG_COLOR); //图片尺寸转换
+    show_bmp(LCD_addr, jpg_buf, 4, 35);    //显示
+
+    //显示当前图片信息
+    sprintf(buf, "--在线随机获取二次元图片  %d*%d", dp->width, dp->height);
+    Display_utf8(100, 10, buf, 0xffffff, 1, 1);
+    destroy_bmp_t(dp);  //销毁
+    destroy_bmp_t(jpg_buf);  //销毁
+    dp = NULL;
+    jpg_buf = NULL;
+    while (1)
+    {
+        if(get_xy(fd_ts, &x_ts, &y_ts) == 0)    //松手
+
+        {
+            int touch_icon = touch_button(api_jpg, x_ts, y_ts);
+            if (touch_icon == 2) //退出
+            {
+                break;
+            } else if (touch_icon == 3)   //下一张
+            {
+                display_icons(LCD_addr, api_jpg, 1);  //覆写标题栏
+                Display_utf8(250, 220, "图片加载中...", 0x000000, 2, 1);
+
+                display_icons(LCD_addr, api_jpg, 4);//显示收藏按钮
+
+                //下载
+                while (1) //循环获取，找到符合条件的图片
+                {
+                    url = get_jpg_api();  //获取一张图片的地址
+                    download_jpg(url, "/tmp/1.jpg"); //下载图片
+                    dp = open_jpeg("/tmp/1.jpg");
+                    if (dp != NULL)
+                        break;
+                    else
+                        sleep(1);
+                }
+                jpg_buf = pic_rebuild_pro(dp, 708, 440, BG_COLOR); //图片尺寸转换
+                show_bmp(LCD_addr, jpg_buf, 4, 35);    //显示
+
+                //显示当前图片信息
+                sprintf(buf, "--在线随机获取二次元图片  %d*%d", dp->width, dp->height);
+                Display_utf8(100, 10, buf, 0xffffff, 1, 1);
+                destroy_bmp_t(dp);  //销毁
+                destroy_bmp_t(jpg_buf);  //销毁
+                dp = NULL;
+                jpg_buf = NULL;
+
+                collect_bit = 0;
+
+            }else if (touch_icon == 4 && collect_bit == 0)  //收藏
+            {
+                collect_bit = 1;
+                char *name = get_find_name(url);
+                sprintf(buf, "cp -v /tmp/1.jpg ./pic/%s",name);  //复制到相册目录下
+                system(buf);
+                Display_utf8(720, 180, "(已收藏)", 0x000000, 1, 0); //提示已收藏
+                //创建节点并有序插入
+                sprintf(buf, "./pic/%s",name);
+                system(buf);
+                //open_jpeg(buf);
+                insert_list_sort(gallery,new_pic(open_jpeg(buf),name));
+                print_allToList(gallery);   //链表遍历
+            }
+        }
+    }
+    del_icon(api_jpg);    //销毁图标
+    return 0;
+}
+
 
 
 //播放页面
@@ -399,7 +506,6 @@ int pic_click_show()
         if(get_xy(fd_ts, &x_ts, &y_ts) == 0)    //松手
         {
             int touch_icon = touch_button(pic_click, x_ts, y_ts);
-            printf("touch_icon: %d\n", touch_icon);
             if(touch_icon == 2) //退出
             {
                 break;
@@ -501,7 +607,8 @@ int menu_start()
                     return 0;
                 case 9: //download
                 printf("9\n");
-                    break;
+                    api_jpg();
+                    return 0;
                 default ://返回上级菜单
                     return -1;
             }
