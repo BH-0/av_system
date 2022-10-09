@@ -29,14 +29,6 @@ bmp_t *pic_rebuild_pro(bmp_t *pic, unsigned int width, unsigned int height, unsi
         printf("zoom_ratio: %f\n", (float)height/(float)pic->height);
 #endif
         char (* pw)[pic->width*3]  = (void *)pic->bmp_buf;
-//        char (*pb)[(int)((float)pic->width/zoom_ratio)*3] = malloc(height*(int)((float)pic->width/zoom_ratio)*3);
-//        for(y_e=0; y_e<height; y_e++)
-//            for(x_e=0; x_e<(int)((float)pic->width/zoom_ratio);x_e++)
-//            {
-//                pb[y_e][x_e*3] = pw[(int)(y_e*zoom_ratio)][(int)(x_e*zoom_ratio)*3];
-//                pb[y_e][x_e*3+1] = pw[(int)(y_e*zoom_ratio)][(int)(x_e*zoom_ratio)*3+1];
-//                pb[y_e][x_e*3+2] = pw[(int)(y_e*zoom_ratio)][(int)(x_e*zoom_ratio)*3+2];
-//            }
 
         int x_x = (width - ((int)((float)pic->width/zoom_ratio)))/2; //实际图片到边缘的距离（黑色背景的宽度）
         for(y_e=0; y_e<height; y_e++)
@@ -59,9 +51,6 @@ bmp_t *pic_rebuild_pro(bmp_t *pic, unsigned int width, unsigned int height, unsi
             pic_x = 0;
         }
 
-//        pic_re->bmp_buf = (void *)pb;
-//        pic_re->width = (int)((float)pic->width/zoom_ratio);
-//        pic_re->height = height;
 
     }else   //宽贴边
     {
@@ -102,52 +91,6 @@ bmp_t *pic_rebuild_pro(bmp_t *pic, unsigned int width, unsigned int height, unsi
     return pic_re;
 }
 
-
-//文件名排序前比较算法
-//入口参数：对比对象，与被对比对象
-//返回值：大于diff_name返回0，小于diff_name返回1，同名返回-1
-//排序是大的放后面，小的放前面，有序插入时直接遍历找到第一个比他大的，并插在他前面
-int find_name_diff(char *object_name, char *diff_name)
-{
-    int i = 0;
-    //先跳过前缀相同的部分
-    while(object_name[i] == diff_name[i] && object_name[i] != '\0' && diff_name[i] != '\0' && i < 255)
-        i++;
-    if(object_name[i] > diff_name[i])
-        return 0;
-    else if(object_name[i] < diff_name[i])
-        return 1;
-    else
-        return -1; //名称全等
-}
-
-//读取某文件的文件名
-//入口参数：文件路径
-char *get_find_name(char *find_path)
-{
-    static char path_buf[512] = {0};
-    strcpy(path_buf, find_path);
-    char *ptr = NULL;
-    char *p = NULL;
-    p = strtok(path_buf,"/");
-    if (p)
-        ptr = p;
-    while (p)
-    {
-        p = strtok(NULL,"/");
-        if(p)
-            ptr = p;
-    }
-    return ptr;
-}
-
-/*
-//目录扫描并更新图片链表
-struct pic_link * pic_link_refresh(struct pic_link *listHead)
-{
-    return NULL;
-}
-*/
 
 //识别图片文件类型
 int pic_find_identify(char *path)

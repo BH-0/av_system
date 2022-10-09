@@ -18,6 +18,7 @@
 #include <sys/mman.h>
 #include <stdlib.h>
 #include <math.h>   //编译时需要链接数学库 -lm
+#include "file.h"
 #include "lcd.h"
 #include "bmp.h"
 #include "jpeg.h"
@@ -26,9 +27,9 @@
 #define JPEG_TYPE 0xd8ff
 
 //一维数组坐标转换
-#define PIC_BUF(y,x) (*(pic->bmp_buf + (y)*pic->width*3 + (x)))
-#define PIC_RE_BUF(y,x) (*(pic_re->bmp_buf + (y)*pic_re->width*3 + (x)))
-#define w3(w) ((int)((w)+0.5)-(((int)((w)+0.5))%3))
+//#define PIC_BUF(y,x) (*(pic->bmp_buf + (y)*pic->width*3 + (x)))
+//#define PIC_RE_BUF(y,x) (*(pic_re->bmp_buf + (y)*pic_re->width*3 + (x)))
+//#define w3(w) ((int)((w)+0.5)-(((int)((w)+0.5))%3))
 
 #define BG_COLOR 0xfaf6e9
 
@@ -55,16 +56,6 @@ extern struct pic_link *gallery;
 //入口参数：图片管理结构体，指定图片大小，背景填充颜色
 //返回值：一个新的图片结构体
 bmp_t *pic_rebuild_pro(bmp_t *pic, unsigned int width, unsigned int height, unsigned int bgcolor);
-
-//文件名排序前比较算法
-//入口参数：对比对象，与被对比对象
-//返回值：大于diff_name返回0，小于diff_name返回1，同名返回-1
-//排序是大的放后面，小的放前面，有序插入时直接遍历找到第一个比他大的，并插在他前面
-int find_name_diff(char *object_name, char *diff_name);
-
-//读取某文件的文件名
-//入口参数：文件路径
-char *get_find_name(char *find_path);
 
 //识别图片文件类型
 int pic_find_identify(char *path);

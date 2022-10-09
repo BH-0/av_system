@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include "file.h"
 #include "lcd.h"
 #include "bmp.h"
 #include "touch.h"

@@ -4,12 +4,12 @@
 //----------------------------------------------------------------
 
 //用户管理
-int usr_data()
-{
-    bmp_t *bg = NULL;
-    bg = open_bmp("./menu/usr_data.bmp");
-    show_bmp(LCD_addr, bg, 0, 0);    //显示背景
-}
+//int usr_data()
+//{
+//    bmp_t *bg = NULL;
+//    bg = open_bmp("./menu/usr_data.bmp");
+//    show_bmp(LCD_addr, bg, 0, 0);    //显示背景
+//}
 
 //随机图片
 int api_jpg() {

@@ -16,20 +16,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3aea8ea3-dfb5-4c5d-978c-c5903239cbc7" name="变更" comment="">
-      <change afterPath="$PROJECT_DIR$/include/usr.h" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/usr.c" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/include/picture.h" beforeDir="false" afterPath="$PROJECT_DIR$/include/picture.h" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/main/main.c" beforeDir="false" afterPath="$PROJECT_DIR$/main/main.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/api.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/api.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/bmp.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/bmp.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/font.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/font.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/icon.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/icon.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/jpeg.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/jpeg.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/lcd.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/lcd.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/menu.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/menu.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/mplayer.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/mplayer.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/picture.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/picture.c" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/touch.c" beforeDir="false" afterPath="$PROJECT_DIR$/src/touch.c" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -120,7 +109,7 @@
       <workItem from="1664933644506" duration="41794000" />
       <workItem from="1665128243506" duration="24746000" />
       <workItem from="1665187515360" duration="27654000" />
-      <workItem from="1665274121263" duration="5529000" />
+      <workItem from="1665274121263" duration="9317000" />
     </task>
     <servers />
   </component>
