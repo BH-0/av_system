@@ -3,16 +3,110 @@
 //此文件为菜单文件，所有主要程序功能此处实现
 //----------------------------------------------------------------
 
+//关机
+void powroff()
+{
+    memset(LCD_addr,'\0',800*480*4);//黑屏
+    Display_utf8(WIN_TITLE_X, WIN_TITLE_Y, "关机动画", 0xffffff, 1, 0);
+    system("mplayer -geometry 160:0 -zoom -x 480 -y 480 -af -cache 8192 -slave \
+                           -input file=/tmp/fifo_cmd_b -quiet ./menu/123.avi");
+    system("poweroff");
+    while(1);
+}
+
 //用户管理
-//int usr_data()
-//{
-//    bmp_t *bg = NULL;
-//    bg = open_bmp("./menu/usr_data.bmp");
-//    show_bmp(LCD_addr, bg, 0, 0);    //显示背景
-//}
+int usr_data()
+{
+    bmp_t *bg = NULL;
+    bg = open_bmp("./menu/usr.bmp");
+    show_bmp(LCD_addr, bg, 0, 0);    //显示背景
+    destroy_bmp_t(bg);  //销毁背景
+    char buf[1024] = {0};
+
+    struct list_icon *usr = create_list_icon();  //初始化按钮图标管理结构体
+    icon_init(usr, "./menu/usr.txt"); //导入图标组
+
+    usr_t usr1; //某用户
+
+    Display_utf8(WIN_TITLE_X, WIN_TITLE_Y, "用户管理", 0xffffff, 1, 1);  //显示标题
+
+    //打开目录
+    DIR *dp = opendir("./usr_date");
+    if(dp == NULL)
+    {
+        perror("opendir fail");
+        return -1;
+    }
+    chdir("./usr_date");//切换到目录里面去
+    struct dirent *ep = NULL;
+    char *origin_p = NULL;
+    while(1)
+    {
+        ep = readdir(dp);
+        if(ep == NULL)  //说明已经读取到最后一项了
+            break;
+        else if(ep->d_name[0] == '.' || ep->d_type == DT_DIR)  //如果文件名的第一个字符是. 或者遇到了目录
+            continue;
+        else if(file_suffix_judgment_pro(ep->d_name,".txt") == 0)    //判断文件类型
+            continue;
+        else
+        {
+            FILE *fp = fopen(ep->d_name,"r");
+            if(fp == NULL)
+            {
+                perror("fopen fail");
+                return -1;
+            }
+            fread(buf,1,1024,fp);
+            fclose(fp);
+            printf("%s\n",buf);
+            char *name_p = strtok(buf,",");
+            char *sex_p = strtok(NULL,",");
+            char *height_p = strtok(NULL,",");
+            origin_p = strtok(NULL,",");
+            strcpy(usr1.name,name_p);
+            usr1.sex = sex_p[1];
+            usr1.height = atoi(height_p);
+            strcpy(usr1.origin,origin_p);
+            break;
+        }
+    }
+
+    //显示
+    if(ep != NULL)
+    {
+        char sex_buf[4];
+        sprintf(sex_buf,"%c",usr1.sex);
+        char height_buf[8];
+        sprintf(height_buf,"%d",usr1.height);
+        Display_utf8(330, 145, usr1.name, 0x00aaff, 2, 1);  //用户名
+        Display_utf8(330, 199, sex_buf, 0x00aaff, 2, 1);  //性别
+        Display_utf8(330, 253, height_buf, 0x00aaff, 2, 1);  //身高
+        Display_utf8(330, 314, usr1.origin, 0x00aaff, 2, 1);  //籍贯
+    }
+
+    //关闭目录
+    chdir("..");
+    closedir(dp);
+
+    while (1)
+    {
+        if(get_xy(fd_ts, &x_ts, &y_ts) == 0)    //松手
+        {
+            int touch_icon = touch_button(usr, x_ts, y_ts);
+            if (touch_icon == 2) //退出
+            {
+                break;
+            }
+        }
+    }
+    del_icon(usr);    //销毁图标
+    return 0;
+}
 
 //随机图片
-int api_jpg() {
+int api_jpg()
+{
     bmp_t *bg = NULL;
     bg = open_bmp("./menu/download.bmp");
     show_bmp(LCD_addr, bg, 0, 0);    //显示背景
@@ -52,7 +146,6 @@ int api_jpg() {
     while (1)
     {
         if(get_xy(fd_ts, &x_ts, &y_ts) == 0)    //松手
-
         {
             int touch_icon = touch_button(api_jpg, x_ts, y_ts);
             if (touch_icon == 2) //退出
@@ -580,13 +673,15 @@ int menu_start()
             {
                 case 1: //关机
                 printf("1\n");
+                    powroff();
                     break;
                 case 2: //注销
                 printf("2\n");
                     break;
                 case 3: //用户管理
                 printf("3\n");
-                    break;
+                    usr_data();
+                    return 0;
                 case 4: //搜索
                 printf("4\n");
                     break;

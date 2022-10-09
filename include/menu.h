@@ -17,6 +17,7 @@
 #include "font.h"
 #include "mplayer.h"
 #include "api.h"
+#include "usr.h"
 
 #define WIN_TITLE_X 28
 #define WIN_TITLE_Y 8

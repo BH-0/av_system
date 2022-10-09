@@ -29,6 +29,12 @@ int main(int argc, char **argv)
     system("killall -SIGKILL  mplayer");    //杀死进程
 
 
+    /*开机动画*/
+    memset(LCD_addr,'\0',800*480*4);//黑屏
+    Display_utf8(WIN_TITLE_X, WIN_TITLE_Y, "开机动画", 0xffffff, 1, 0);
+    system("mplayer -geometry 160:0 -zoom -x 480 -y 480 -af -cache 8192 -slave \
+                           -input file=/tmp/fifo_cmd_b -quiet ./menu/321.avi");
+
 #if 1 //进入线程
     while (1)
     {
